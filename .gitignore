@@ -1,0 +1,6 @@
+tetlphp
+.develop
+error.log
+access.log
+database/db.sqlite
+config/resources.php

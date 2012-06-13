@@ -1,0 +1,60 @@
+- stylesheet_for('app');
+- javascript_for('app');
+- $opts = array(host => TRUE, complete => TRUE)
+- $s = stations::$stations
+section
+  header How to use the API
+  article
+    dl
+      dt
+        h3 GET
+      dd
+        pre
+          |/api(/<var>:from</var>(/<var>:to</var>(/<var>:what</var>(/<var>*params</var>))))
+        ul
+          li
+            If no arguments was specified in the request will retrieve all the station ids.
+            p Example query:
+            pre = '$ curl ', url_for('/api', $opts)
+            p Example output:
+            <pre>[1,2,3,...]</pre>
+          li
+            If <var>:from</var> was specified alone will retrieve the station details.
+            p Example query:
+            pre = '$ curl ', url_for('/api/13', $opts)
+            p Example output:
+            <pre>{"name":"Balderas","lat":"19.42703073252642","lng":"-99.14901583021663","shortName":"balderas","line":["1","3"],"next":{"12":21,"14":24,"50":25,"51":26}}</pre>
+            dl
+              dt name
+              dd The actual station name.
+              dt lat
+              dd Latitude
+              dt lng
+              dd Longitude
+              dt shortName
+              dd Useful for clean-urls.
+              dt line
+              dd The stations belongs to.
+              dt next
+              dd Adjacent stations.
+          li
+            If <var>:from</var> and <var>:to</var> are both included, it will retrieve the shortest route between those two stations.
+            p Example query:
+            pre = '$ curl ', url_for('/api/13/20', $opts)
+            p Example output:
+            <pre>[20,19,18,17,16,...]</pre>
+      dt
+        h3 Try
+      dd
+        From
+        select { id => 'from' }
+          - foreach $s as $k => $v
+            option { value => $k } = $v['name']
+        To
+        select { id => 'to' }
+          - foreach $s as $k => $v
+            option { value => $k } = $v['name']
+        input#go { value => 'Go!', type => 'submit' }
+        fieldset
+          legend Output
+          #output
